@@ -14,11 +14,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/bootdotdev/learn-web-security/internal/auth/passwords"
-	"github.com/bootdotdev/learn-web-security/internal/database"
-	"github.com/bootdotdev/learn-web-security/internal/httpserver"
-	"github.com/bootdotdev/learn-web-security/internal/logging"
-	"github.com/bootdotdev/learn-web-security/internal/storage"
+	"github.com/geneowak/learn-web-security/internal/auth/passwords"
+	"github.com/geneowak/learn-web-security/internal/database"
+	"github.com/geneowak/learn-web-security/internal/httpserver"
+	"github.com/geneowak/learn-web-security/internal/logging"
+	"github.com/geneowak/learn-web-security/internal/storage"
 )
 
 const applicationOrigin = "http://bearly-secure.test"

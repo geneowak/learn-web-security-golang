@@ -5,7 +5,7 @@ import (
 	"time"
 	"uuid"
 
-	"github.com/bootdotdev/learn-web-security/internal/logging"
+	"github.com/geneowak/learn-web-security/internal/logging"
 )
 
 type authAlertCounter struct {

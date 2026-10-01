@@ -17,10 +17,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/bootdotdev/learn-web-security/internal/auth/mfa"
-	"github.com/bootdotdev/learn-web-security/internal/config"
-	"github.com/bootdotdev/learn-web-security/internal/database"
-	"github.com/bootdotdev/learn-web-security/internal/storage"
+	"github.com/geneowak/learn-web-security/internal/auth/mfa"
+	"github.com/geneowak/learn-web-security/internal/config"
+	"github.com/geneowak/learn-web-security/internal/database"
+	"github.com/geneowak/learn-web-security/internal/storage"
 )
 
 func TestLessonKeyManagementPolicy(t *testing.T) {

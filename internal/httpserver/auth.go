@@ -6,14 +6,14 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/bootdotdev/learn-web-security/internal/accounts"
-	"github.com/bootdotdev/learn-web-security/internal/auth/mfa"
-	"github.com/bootdotdev/learn-web-security/internal/auth/passwordreset"
-	"github.com/bootdotdev/learn-web-security/internal/auth/passwords"
-	"github.com/bootdotdev/learn-web-security/internal/auth/sessions"
-	"github.com/bootdotdev/learn-web-security/internal/httpx"
-	"github.com/bootdotdev/learn-web-security/internal/logging"
-	"github.com/bootdotdev/learn-web-security/internal/templates"
+	"github.com/geneowak/learn-web-security/internal/accounts"
+	"github.com/geneowak/learn-web-security/internal/auth/mfa"
+	"github.com/geneowak/learn-web-security/internal/auth/passwordreset"
+	"github.com/geneowak/learn-web-security/internal/auth/passwords"
+	"github.com/geneowak/learn-web-security/internal/auth/sessions"
+	"github.com/geneowak/learn-web-security/internal/httpx"
+	"github.com/geneowak/learn-web-security/internal/logging"
+	"github.com/geneowak/learn-web-security/internal/templates"
 )
 
 const (

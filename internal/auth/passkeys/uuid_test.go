@@ -10,7 +10,7 @@ import (
 	"time"
 	"uuid"
 
-	"github.com/bootdotdev/learn-web-security/internal/database"
+	"github.com/geneowak/learn-web-security/internal/database"
 	webauthn "github.com/go-webauthn/webauthn/webauthn"
 )
 

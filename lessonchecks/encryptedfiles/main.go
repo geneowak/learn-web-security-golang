@@ -18,8 +18,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bootdotdev/learn-web-security/internal/config"
-	"github.com/bootdotdev/learn-web-security/internal/database"
+	"github.com/geneowak/learn-web-security/internal/config"
+	"github.com/geneowak/learn-web-security/internal/database"
 	"github.com/joho/godotenv"
 )
 

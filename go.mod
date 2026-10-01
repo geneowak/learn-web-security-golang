@@ -1,4 +1,4 @@
-module github.com/bootdotdev/learn-web-security
+module github.com/geneowak/learn-web-security
 
 go 1.27.0
 

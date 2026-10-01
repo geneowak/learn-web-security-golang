@@ -12,7 +12,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/bootdotdev/learn-web-security/internal/database/dbgen"
+	"github.com/geneowak/learn-web-security/internal/database/dbgen"
 )
 
 const defaultSessionTTL = 30 * 24 * time.Hour

@@ -7,14 +7,14 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/bootdotdev/learn-web-security/internal/accounts"
-	"github.com/bootdotdev/learn-web-security/internal/auth/sessions"
-	"github.com/bootdotdev/learn-web-security/internal/httpx"
-	"github.com/bootdotdev/learn-web-security/internal/logging"
-	"github.com/bootdotdev/learn-web-security/internal/orders"
-	"github.com/bootdotdev/learn-web-security/internal/storage"
-	"github.com/bootdotdev/learn-web-security/internal/templates"
-	"github.com/bootdotdev/learn-web-security/internal/uploads"
+	"github.com/geneowak/learn-web-security/internal/accounts"
+	"github.com/geneowak/learn-web-security/internal/auth/sessions"
+	"github.com/geneowak/learn-web-security/internal/httpx"
+	"github.com/geneowak/learn-web-security/internal/logging"
+	"github.com/geneowak/learn-web-security/internal/orders"
+	"github.com/geneowak/learn-web-security/internal/storage"
+	"github.com/geneowak/learn-web-security/internal/templates"
+	"github.com/geneowak/learn-web-security/internal/uploads"
 )
 
 type dashboardPage struct {

@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bootdotdev/learn-web-security/internal/httpserver"
+	"github.com/geneowak/learn-web-security/internal/httpserver"
 )
 
 type checkResults struct {
