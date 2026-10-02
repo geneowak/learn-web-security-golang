@@ -56,6 +56,10 @@ type totpBackupCodesView struct {
 	BackupCodes []string
 }
 
+func (handler *Handler) logAccountEvent(eventName string, fields map[string]any) {
+	_ = handler.logger.Event(eventName, fields)
+}
+
 func (handler *Handler) Page(responseWriter http.ResponseWriter, request *http.Request) {
 	current, ok := handler.requireAuth(responseWriter, request)
 	if !ok {
@@ -64,6 +68,12 @@ func (handler *Handler) Page(responseWriter http.ResponseWriter, request *http.R
 	if err := handler.renderPage(responseWriter, http.StatusOK, current, ""); err != nil {
 		handler.internalError(responseWriter, request, err)
 	}
+
+	handler.logAccountEvent("account_accessed", map[string]any{
+		"userId":    current.User.ID,
+		"email":     current.User.Email,
+		"expiresAt": formatTimestamp(current.Session.ExpiresAt),
+	})
 }
 
 func (handler *Handler) UpdateEmail(responseWriter http.ResponseWriter, request *http.Request) {
