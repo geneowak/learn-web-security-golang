@@ -5,6 +5,7 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"database/sql"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"time"
@@ -39,21 +40,22 @@ func (store *Store) Create(ctx context.Context, userID int64) (Token, error) {
 		return Token{}, fmt.Errorf("failed to generate reset token: %w", err)
 	}
 	expiresAt := now.Add(tokenTTL)
+	tokenString := hex.EncodeToString(value)
 	if err := store.queries.CreatePasswordResetToken(ctx, dbgen.CreatePasswordResetTokenParams{
 		UserID:    userID,
-		TokenHash: hashToken(string(value)),
+		TokenHash: hashToken(tokenString),
 		ExpiresAt: formatTimestamp(expiresAt),
 	}); err != nil {
 		return Token{}, fmt.Errorf("create password reset token: %w", err)
 	}
-	token, found, err := store.Validate(ctx, string(value))
+	token, found, err := store.Validate(ctx, tokenString)
 	if err != nil {
 		return Token{}, err
 	}
 	if !found {
 		return Token{}, errors.New("created password reset token was not found")
 	}
-	token.Value = string(value)
+	token.Value = tokenString
 	return token, nil
 }
 
@@ -124,9 +126,8 @@ func (store *Store) ResetPassword(ctx context.Context, value, passwordHash strin
 }
 
 func hashToken(value string) string {
-	h := sha256.New()
-	h.Write([]byte(value))
-	return string(h.Sum(nil))
+	hash := sha256.Sum256([]byte(value))
+	return hex.EncodeToString(hash[:])
 }
 
 func formatTimestamp(timestamp time.Time) string {
