@@ -1,9 +1,7 @@
 {{define "account"}}{{template "document-start" .}}
 <nav class="page-nav" aria-label="Primary">
-  <a class="brand-link" href="/">Bearly Secure</a>{{if .IsSupport}}<a
-    href="/support"
-    >Support</a
-  >{{end}}{{if .IsAdmin}}<a href="/admin">Admin</a>{{end}}
+  <a class="brand-link" href="/">Bearly Secure</a>{{if .IsSupport}}<a href="/support">Support</a>{{end}}{{if
+  .IsAdmin}}<a href="/admin">Admin</a>{{end}}
   <form method="post" action="/logout" class="logout-form">
     <button type="submit">Log out</button>
   </form>
@@ -27,18 +25,14 @@
       <dd>{{.Current.User.Role}}</dd>
     </dl>
     <form method="post" action="/account/email" class="account-form">
-      <input
-        name="csrfToken"
-        type="hidden"
-        value="{{.Current.Session.CSRFToken}}"
-      /><label
-        >Email<input
-          name="email"
-          type="email"
-          autocomplete="email"
-          value="{{.Current.User.Email}}"
-          required /></label
-      ><button type="submit">Change email</button>
+      <input name="csrfToken" type="hidden" value="{{.Current.Session.CSRFToken}}" />
+      <label>Current Password
+        <input name="currentPassword:" type="password" autocomplete="password" value="" required />
+      </label>
+      <label>Email
+        <input name="email" type="email" autocomplete="email" value="{{.Current.User.Email}}" required />
+      </label>
+      <button type="submit">Change email</button>
     </form>
   </article>
   <article class="card">

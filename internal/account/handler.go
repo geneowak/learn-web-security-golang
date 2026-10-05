@@ -10,6 +10,7 @@ import (
 
 	"github.com/geneowak/learn-web-security/internal/accounts"
 	"github.com/geneowak/learn-web-security/internal/auth/mfa"
+	"github.com/geneowak/learn-web-security/internal/auth/passwords"
 	"github.com/geneowak/learn-web-security/internal/auth/sessions"
 	"github.com/geneowak/learn-web-security/internal/httpx"
 	"github.com/geneowak/learn-web-security/internal/logging"
@@ -82,8 +83,15 @@ func (handler *Handler) UpdateEmail(responseWriter http.ResponseWriter, request 
 		return
 	}
 	email, emailErr := httpx.FormValue(request, "email")
-	if emailErr != nil {
+	currPassword, currPassErr := httpx.FormValue(request, "currentPassword")
+	if emailErr != nil || currPassErr != nil {
 		handler.errorPage(responseWriter, http.StatusBadRequest, "Invalid Request", "The submitted form is invalid.")
+		return
+	}
+	if currPassword == "" || !passwords.Verify(currPassword, current.User.PasswordHash) {
+		if err := handler.renderPage(responseWriter, http.StatusForbidden, current, "Invalid Password: Re-enter your current password"); err != nil {
+			handler.internalError(responseWriter, request, err)
+		}
 		return
 	}
 	email = accounts.NormalizeEmail(email)
