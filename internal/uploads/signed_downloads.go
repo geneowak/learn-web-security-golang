@@ -6,9 +6,9 @@ import (
 	"crypto/subtle"
 	"encoding/hex"
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
-
-	"github.com/geneowak/learn-web-security/internal/httpx"
 )
 
 const signedDownloadTTL = 5 * time.Minute
@@ -23,15 +23,20 @@ func VerifySignedDownload(signingKey [32]byte, fileID int64, expiresValue, signa
 	if expiresValue == "" || strings.Trim(expiresValue, "0123456789") != "" || len(signature) != 64 {
 		return false
 	}
-	expires, ok := httpx.ParseSafeInteger(expiresValue)
-	if !ok {
+	providedSignature, err := hex.DecodeString(signature)
+	if err != nil || len(providedSignature) != sha256.Size {
 		return false
 	}
-	mac := signDownload(signingKey, fileID, expires)
-	if expires <= now.Unix() || subtle.ConstantTimeCompare([]byte(mac), []byte(signature)) != 1 {
+	expires, err := strconv.ParseInt(expiresValue, 10, 64)
+	if err != nil || expires <= now.Unix() {
 		return false
 	}
-	return true
+	deriveSignature := signDownload(signingKey, fileID, expires)
+	expectedSignature, err := hex.DecodeString(deriveSignature)
+	if err != nil {
+		return false
+	}
+	return subtle.ConstantTimeCompare(expectedSignature, providedSignature) == 1
 }
 
 func signDownload(signingKey [32]byte, fileID, expires int64) string {
