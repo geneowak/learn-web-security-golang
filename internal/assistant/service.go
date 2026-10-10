@@ -79,7 +79,7 @@ func RunSimulatedAssistant(ctx context.Context, request Request) (string, error)
 	return "Order status is unavailable.", nil
 }
 
-func (service *Service) createTools(authUserID ent64) []Tool {
+func (service *Service) createTools(authUserID int64) []Tool {
 	return []Tool{
 		{
 			Name:        "get_order_status",
