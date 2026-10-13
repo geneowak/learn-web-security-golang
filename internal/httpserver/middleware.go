@@ -40,7 +40,7 @@ func setContentTypeOptions(next http.Handler) http.Handler {
 func validateSource(appOrigin string, renderer *templates.Renderer) middleware {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if r.Method != "POST" {
+			if r.Method != http.MethodPost {
 				next.ServeHTTP(w, r)
 				return
 			}
@@ -48,13 +48,13 @@ func validateSource(appOrigin string, renderer *templates.Renderer) middleware {
 			if referer, err := url.Parse(r.Header.Get("Referer")); originHeader == "" && err == nil && referer.Host != "" {
 				originHeader = fmt.Sprintf("%s://%s", referer.Scheme, referer.Host)
 			}
-			if originHeader == "" || originHeader != appOrigin {
-				if err := httpx.RespondWithErrorPage(w, renderer, http.StatusForbidden, "Unknown Origin", "Only requests from same origin are accepted."); err != nil {
-					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
-				}
+			if originHeader == appOrigin {
+				next.ServeHTTP(w, r)
 				return
 			}
-			next.ServeHTTP(w, r)
+			if err := httpx.RespondWithErrorPage(w, renderer, http.StatusForbidden, "Unknown Origin", "Only requests from same origin are accepted."); err != nil {
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
 		})
 	}
 }
