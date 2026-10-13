@@ -9,6 +9,7 @@ import (
 	"math"
 	"net"
 	"net/http"
+	"net/url"
 	"slices"
 	"strconv"
 	"strings"
@@ -34,6 +35,28 @@ func setContentTypeOptions(next http.Handler) http.Handler {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		next.ServeHTTP(w, r)
 	})
+}
+
+func validateSource(appOrigin string, renderer *templates.Renderer) middleware {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if r.Method != "POST" {
+				next.ServeHTTP(w, r)
+				return
+			}
+			originHeader := r.Header.Get("Origin")
+			if referer, err := url.Parse(r.Header.Get("Referer")); originHeader == "" && err == nil && referer.Host != "" {
+				originHeader = fmt.Sprintf("%s://%s", referer.Scheme, referer.Host)
+			}
+			if originHeader == "" || originHeader != appOrigin {
+				if err := httpx.RespondWithErrorPage(w, renderer, http.StatusForbidden, "Unknown Origin", "Only requests from same origin are accepted."); err != nil {
+					http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				}
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 func permissiveCORS(next http.Handler) http.Handler {
