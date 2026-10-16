@@ -77,10 +77,23 @@ func (handler *Handler) Page(responseWriter http.ResponseWriter, request *http.R
 		handler.internalError(responseWriter, request, err)
 	}
 }
+func (handler *Handler) verifyCSRFToken(w http.ResponseWriter, r *http.Request, expectedToken string) bool {
+	actualToken, err := httpx.FormValue(r, "csrfToken")
+	if err != nil {
+		handler.errorPage(w, http.StatusBadRequest, "Invalid Request", "The submitted form is invalid")
+		return false
+	}
+	if sessions.CSRFTokensMatch(expectedToken, actualToken) {
+		return true
+	}
+
+	handler.errorPage(w, http.StatusForbidden, "Forbidden", "Your request could not be verified")
+	return false
+}
 
 func (handler *Handler) Submit(responseWriter http.ResponseWriter, request *http.Request) {
 	current, ok := handler.requireAuth(responseWriter, request)
-	if !ok {
+	if !ok || !handler.verifyCSRFToken(responseWriter, request, current.Session.CSRFToken) {
 		return
 	}
 	items, err := handler.cartStore.ListItems(request.Context(), current.User.ID)
